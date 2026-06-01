@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #my_apps
+    'home_app.apps.HomeAppConfig',
+    'blog_app.apps.BlogAppConfig',
+    'accounts_app.apps.AccountsAppConfig',
 
     # my_app_install
     'django_cleanup',
