@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Posts
+{% endblock %}
+
+{% block content %}
+    <!-- Page Content -->
+    <!-- Banner Starts Here -->
+    <div class="heading-page header-text">
+        <section class="page-heading">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-content">
+                            <h4>Recent Posts</h4>
+                            <h2>Our Recent Blog Entries</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+    <section class="blog-posts grid-system">
+        <div class="container">
+        <h5><a href="{% url 'blog_app:post-create' %}">AddPost</a></h5>
+        <br>
+        <br>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="all-blog-posts">
+                        <div class="row">
+                            {% for post in posts %}
+                                <div class="col-lg-6">
+                                    <div class="blog-post">
+                                        <div class="blog-thumb">
+                                            {% if post.image %}
+                                                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                                            {% else %}
+                                                <img src="{% static 'images/default-post.jpg' %}" alt="">
+                                            {% endif %}
+                                        </div>
+                                        <div class="down-content">
+                                            <span>{{ post.category.all|join:", " }}</span>
+                                            <a href="{{ post.get_absolute_url }}"><h4>{{ post.title }}</h4></a>
+                                            <ul class="post-info">
+                                                <li>
+                                                    {% if post.author.email %}
+                                                        <a href="">{{ post.author.email }}</a>
+                                                    {% else %}
+                                                        {{ post.author.email }}
+                                                    {% endif %}
+                                                </li>
+                                                <li>{{ post.created_date|date:"d/M/Y" }}</li>
+                                                <li>{{ post.counted_views }}</li>
+                                            </ul>
+                                            <p>{{ post.content|truncatechars:100 }}</p>
+                                        <h6><a href="{% url 'blog_app:post-update' slug=post.slug %}">EditPost</a></h6>
+                                        <br>
+                                        <h6><a href="{% url 'blog_app:post-delete' slug=post.slug %}">DeletePost</a></h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                            <div class="col-lg-12">
+                                <ul class="page-numbers">
+                                    {% if page_obj.has_previous %}
+                                        <li><a href="?page={{ page_obj.previous_page_number }}"><i
+                                                class="fa fa-angle-double-left"></i></a></li>
+                                    {% endif %}
+
+                                    {% for num in page_obj.paginator.page_range %}
+                                        {% if num == page_obj.number %}
+                                            <li class="active"><a href="">{{ num }}</a></li>
+                                        {% else %}
+                                            <li><a href="?page={{ num }}">{{ num }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+
+                                    {% if page_obj.has_next %}
+                                        <li><a href="?page={{ page_obj.next_page_number }}"><i
+                                                class="fa fa-angle-double-right"></i></a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="sidebar">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="sidebar-item search">
+                                    {#                                    <form id="search_form" name="s" method="GET" action="{% url 'blog_app:search' %}">#}
+                                    {#                                        <input type="text" name="s" class="searchText" placeholder="type to search..."#}
+                                    {#                                               autocomplete="on">#}
+                                    {#                                    </form>#}
+                                </div>
+                            </div>
+                            {#                            {% recent_posts %}#}
+                            {#                            {% post_categories %}#}
+                            {#                            {% post_tags %}#}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
