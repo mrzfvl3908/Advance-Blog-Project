@@ -1,0 +1,17 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+{% include 'head_ref.html' %}
+<title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+{% include 'header.html' %}
+{% block content %}{% endblock %}
+{% include 'footer.html' %}
+{% include 'foot_ref.html' %}
+</body>
+</html>
