@@ -131,6 +131,14 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# user manager config
 AUTH_USER_MODEL = 'accounts_app.User'
 
+
+# restframework  settings
+# REST_FRAMEWORK = {
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ]
+# }
 
