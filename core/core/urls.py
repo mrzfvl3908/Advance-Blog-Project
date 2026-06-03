@@ -21,10 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api-auth/", include("rest_framework.urls")),
     path('', include('home_app.urls')),
-    path('blog/',include('blog_app.urls')),
-    path('accounts/',include('django.contrib.auth.urls')),
-    path("api-auth/", include("rest_framework.urls"))
+    path('blog/', include('blog_app.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
