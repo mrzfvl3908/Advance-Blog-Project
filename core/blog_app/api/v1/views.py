@@ -1,6 +1,9 @@
+from pickle import FALSE
+from xmlrpc.client import Fault
+
 from django.core.serializers import serialize
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -89,6 +92,9 @@ class PostModelViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
 
+    # @action(methods=['get'], detail=False)
+    # def get_ok(self,request):
+    #     return Response({'detail':'ok'})
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
