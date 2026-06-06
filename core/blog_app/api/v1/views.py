@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import PostSerializer
-from ...models import Post
+from .serializers import PostSerializer, CategorySerializer
+from ...models import Post, Category
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 
@@ -81,35 +81,16 @@ from rest_framework import viewsets
 #     queryset = Post.objects.all()
 """
 
+
 # Example for viewset in cbv
 
-class PostViewSet(viewsets.ViewSet):
+class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
-
-    def list(self, request):
-        serializer = self.serializer_class(self.queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk):
-        post_object = get_object_or_404(Post, id=pk)
-        serializer = self.serializer_class(post_object)
-        return Response(serializer.data)
-
-    def create(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
-
-    def update(self, request, slug):
-        pass
-
-    def partial_update(self, request, slug):
-        pass
-
-    def destroy(self, request, slug):
-        pass
+    queryset = Post.objects.filter(status=True)
 
 
+class CategoryModelViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
