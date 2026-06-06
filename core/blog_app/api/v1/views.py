@@ -8,8 +8,9 @@ from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIVi
 from .serializers import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
 
-
+"""
 # @api_view(["GET", "POST"])
 # @permission_classes([IsAuthenticated])
 # def postList(request):
@@ -39,13 +40,6 @@ from django.shortcuts import get_object_or_404
 #         return Response({"detail": "post delete successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
-class PostList(ListAPIView, ListCreateAPIView):
-    ''' getting post for list and create post '''
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = PostSerializer
-    queryset = Post.objects.all()
-
-
 # class PostDetail(APIView):
 #     ''' GEETING DETAIL OF THE POST AND EDIT PLUS REMOVING IT '''
 #     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -71,8 +65,51 @@ class PostList(ListAPIView, ListCreateAPIView):
 #         post.delete()
 #         return Response({"detail": "post delete successfully"}, status=status.HTTP_204_NO_CONTENT)
 
-class PostDetail(RetrieveUpdateDestroyAPIView):
-    ''' GEETING DETAIL OF THE POST AND EDIT PLUS REMOVING IT '''
+
+
+# class PostList(ListAPIView, ListCreateAPIView):
+#     ''' getting post for list and create post '''
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     serializer_class = PostSerializer
+#     queryset = Post.objects.all()
+# 
+# 
+# class PostDetail(RetrieveUpdateDestroyAPIView):
+#     ''' GEETING DETAIL OF THE POST AND EDIT PLUS REMOVING IT '''
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     serializer_class = PostSerializer
+#     queryset = Post.objects.all()
+"""
+
+# Example for viewset in cbv
+
+class PostViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+
+    def list(self, request):
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, slug):
+        post_object = get_object_or_404(Post, slug=slug)
+        serializer = self.serializer_class(post_object)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+    def update(self, request, slug):
+        pass
+
+    def partial_update(self, request, slug):
+        pass
+
+    def destroy(self, request, slug):
+        pass
+
+
