@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView
 from .serializers import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
@@ -38,23 +39,13 @@ from django.shortcuts import get_object_or_404
 #         return Response({"detail": "post delete successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
-class PostList(APIView):
+class PostList(ListAPIView,ListCreateAPIView):
     ''' getting post for list and create post '''
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
-    def get(self, request):
-        '''get post for list'''
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
 
-    def post(self, request):
-        ''' create a new post '''
-        serializer = PostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
 
 class PostDetail(APIView):
