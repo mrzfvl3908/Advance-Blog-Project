@@ -40,7 +40,7 @@ class PostSerializer(serializers.ModelSerializer):
         if request.parser_context.get('kwargs').get('pk'):  # }
             rep.pop('snippet', None)  # }
 
-        rep['category'] = CategorySerializer(instance.category).data
+        rep['category'] = CategorySerializer(instance.category,context={'request':request}).data
         return rep
 
 # class PostSerializer(serializers.HyperlinkedModelSerializer): راه حرفه ای تر برای ننوشتن متد پست برای نمایش url
