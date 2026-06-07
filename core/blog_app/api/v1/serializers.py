@@ -1,5 +1,5 @@
-from django.template.context_processors import request
 from rest_framework import serializers
+from accounts_app.models import Profile
 from blog_app.models import Post, Category
 
 
@@ -22,8 +22,7 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id', 'category', 'author', 'title', 'image', 'content', 'published_date', 'status', 'snippet',
                   'absolute_url']
-
-        # read_only_fields = ['content']
+        read_only_fields = ['author']
 
     def get_abs_url(self, obj):
         request = self.context.get('request')
@@ -42,6 +41,11 @@ class PostSerializer(serializers.ModelSerializer):
 
         rep['category'] = CategorySerializer(instance.category,context={'request':request}).data
         return rep
+
+
+    def create(self, validated_data):
+        validated_data['author'] = Profile.objects.get(user__id = self.context.get('request').user.id)
+        return super().create(validated_data)
 
 # class PostSerializer(serializers.HyperlinkedModelSerializer): راه حرفه ای تر برای ننوشتن متد پست برای نمایش url
 #     class Meta:

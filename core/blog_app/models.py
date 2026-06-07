@@ -21,8 +21,8 @@ class Post(models.Model):
     published_date = models.DateTimeField()
     slug = models.SlugField(unique=True, blank=True, allow_unicode=True, null=True)
 
-    # class Meta:
-    #     ordering = ['-created_date']
+    class Meta:
+        ordering = ['-created_date']
 
     def save(self, *args, **kwargs):
         if not self.slug:
