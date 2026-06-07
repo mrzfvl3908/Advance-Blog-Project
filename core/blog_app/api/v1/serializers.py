@@ -20,24 +20,27 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'category', 'author', 'title', 'content', 'published_date', 'status', 'snippet', 'absolute_url']
+        fields = ['id', 'category', 'author', 'title', 'image', 'content', 'published_date', 'status', 'snippet',
+                  'absolute_url']
 
         # read_only_fields = ['content']
 
     def get_abs_url(self, obj):
         request = self.context.get('request')
-
         if request:
             return request.build_absolute_uri(
                 obj.get_absolute_url()
             )
-
         return obj.get_absolute_url()
 
-    def to_representation(self, instance): #=> برای نمایش موارد استفاده میشود مثل تایتل یا کتگوری و .... و بحثش از ثبت کردن پست فرق داره فقط برای نمایشه این بخش
-        rep = super().to_representation(instance)
+
+    def to_representation(self,instance):  # => برای نمایش موارد استفاده میشود مثل تایتل یا کتگوری و .... و بحثش از ثبت کردن پست فرق داره فقط برای نمایشه این بخش
+        request = self.context.get('request')  # }
+        rep = super().to_representation(instance)  # }  => این بخش برای نمایش اسنیپت در دیتیل پست و حذف شده در پست لیست
+        if request.parser_context.get('kwargs').get('pk'):  # }
+            rep.pop('snippet', None)  # }
+
         rep['category'] = CategorySerializer(instance.category).data
-        rep.pop('snippet', None)
         return rep
 
 # class PostSerializer(serializers.HyperlinkedModelSerializer): راه حرفه ای تر برای ننوشتن متد پست برای نمایش url
