@@ -89,7 +89,7 @@ from .permissions import IsOwnerOrReadOnly
 # Example for viewset in cbv
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     # lookup_field = 'slug'
