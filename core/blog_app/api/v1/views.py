@@ -12,6 +12,7 @@ from .serializers import PostSerializer, CategorySerializer
 from ...models import Post, Category
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
+from .permissions import IsOwnerOrReadOnly
 
 """
 # @api_view(["GET", "POST"])
@@ -88,9 +89,10 @@ from rest_framework import viewsets
 # Example for viewset in cbv
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    queryset = Post.objects.filter(status=True)
+    queryset = Post.objects.all()
+    # lookup_field = 'slug'
 
     # @action(methods=['get'], detail=False)
     # def get_ok(self,request):

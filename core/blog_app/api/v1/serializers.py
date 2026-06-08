@@ -27,22 +27,21 @@ class PostSerializer(serializers.ModelSerializer):
     def get_abs_url(self, obj):
         request = self.context.get('request')
         if request:
-            return request.build_absolute_uri(
-                obj.get_absolute_url()
-            )
+            return request.build_absolute_uri(obj.get_absolute_url)
         return obj.get_absolute_url()
 
 
     def to_representation(self,instance):  # => برای نمایش موارد استفاده میشود مثل تایتل یا کتگوری و .... و بحثش از ثبت کردن پست فرق داره فقط برای نمایشه این بخش
         request = self.context.get('request')  # }
         rep = super().to_representation(instance)  # }  => این بخش برای نمایش اسنیپت در دیتیل پست و حذف شده در پست لیست
-        if request.parser_context.get('kwargs').get('pk'):  # }
+        if request.parser_context.get('kwargs').get('slug'):  # }
             rep.pop('snippet', None)  # }
 
         rep['category'] = CategorySerializer(instance.category,context={'request':request}).data
         return rep
 
 
+    # => گرفتن یوزر مورد نظر و پر کردن جای یوزر برای ساختن یک پست جدید بعدا برای گرفتن مثلا تمام پست های یک یوزر که مربوط به ان است استفاده میشه اینجوری با این سبک
     def create(self, validated_data):
         validated_data['author'] = Profile.objects.get(user__id = self.context.get('request').user.id)
         return super().create(validated_data)
