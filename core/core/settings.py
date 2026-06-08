@@ -37,14 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #my_apps
+    # my_apps
     'home_app.apps.HomeAppConfig',
     'blog_app.apps.BlogAppConfig',
     'accounts_app.apps.AccountsAppConfig',
 
     # my_app_install
     'django_cleanup',
-    "rest_framework",
+    'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -134,11 +135,13 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # user manager config
 AUTH_USER_MODEL = 'accounts_app.User'
 
-
 # restframework  settings
 # REST_FRAMEWORK = {
 #     'DEFAULT_PERMISSION_CLASSES': [
 #         'rest_framework.permissions.IsAuthenticated',
 #     ]
-# }
+# } => برای سطح دسترسی کاربران مثل لاگین
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+# } => برای فیلتر سازی

@@ -1,18 +1,11 @@
-from pickle import FALSE
-from xmlrpc.client import Fault
-
-from django.core.serializers import serialize
-from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .paginations import CustomPagination
+from .permissions import IsOwnerOrReadOnly
 from .serializers import PostSerializer, CategorySerializer
 from ...models import Post, Category
-from django.shortcuts import get_object_or_404
-from rest_framework import viewsets
-from .permissions import IsOwnerOrReadOnly
 
 """
 # @api_view(["GET", "POST"])
@@ -89,14 +82,20 @@ from .permissions import IsOwnerOrReadOnly
 # Example for viewset in cbv
 
 class PostModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.all()
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['category', 'author', 'status']
+    search_fields = ['title', 'content']
+    ordering_fields = ['created_date', 'updated_date']
+    pagination_class = CustomPagination
     # lookup_field = 'slug'
 
     # @action(methods=['get'], detail=False)
     # def get_ok(self,request):
     #     return Response({'detail':'ok'})
+
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
