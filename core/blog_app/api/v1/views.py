@@ -92,6 +92,16 @@ class PostModelViewSet(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     # lookup_field = 'slug'
 
+    # filterset_fields = {
+    #     "profile": ["exact", "in"],
+    #     "cooperation_type": ["exact", "in"],
+    #     "location": ["in", "exact"],
+    #     "salary": ["exact", "in"],
+    #     "category": ["in", "exact"],
+    #     "year_experience": ["in", "exact"],
+    #     "skill": ["exact"],
+    # }
+
     # @action(methods=['get'], detail=False)
     # def get_ok(self,request):
     #     return Response({'detail':'ok'})
@@ -101,3 +111,27 @@ class CategoryModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+
+
+
+
+# from django_filters import rest_framework as filters
+# from myapp import Product
+#
+#
+# class ProductFilter(filters.FilterSet):
+#     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
+#     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
+#
+#     class Meta:
+#         model = Product
+#         fields = ['category', 'in_stock']
+#
+#
+# class ProductList(generics.ListAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     filter_backends = (filters.DjangoFilterBackend,)
+#     filterset_class = ProductFilter
+# در نمونه بالا FilterSet کلاس مادر فیلتر شخصی‌سازی ما خواهد بود و از اونجایی که از کلاس meta استفاده می شه فیلد های مشخصی از مدل را می‌توان در نظر گرفت و استفاده کرد ولی فقط محدود به ان فیلد ها نخواهد بود.
+# در نمونه NumberFilter نام فیلد و نحوه بررسی ذکر شده است که gte منظور "بزرگتر از" و lte منظور "کوچکتر از" یه مقدار میباشد. که با در نظر گرفتن هر دو ورودی می‌خواهیم یک range را ایجاد کنیم.
