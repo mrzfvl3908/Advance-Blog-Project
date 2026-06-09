@@ -34,7 +34,7 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self,instance):  # => برای نمایش موارد استفاده میشود مثل تایتل یا کتگوری و .... و بحثش از ثبت کردن پست فرق داره فقط برای نمایشه این بخش
         request = self.context.get('request')  # }
         rep = super().to_representation(instance)  # }  => این بخش برای نمایش اسنیپت در دیتیل پست و حذف شده در پست لیست
-        if request.parser_context.get('kwargs').get('slug'):  # }
+        if request.parser_context.get('kwargs').get('pk'):  # }
             rep.pop('snippet', None)  # }
 
         rep['category'] = CategorySerializer(instance.category,context={'request':request}).data
